@@ -16,55 +16,82 @@ import com.example.testing.Repository.ContestRepository
 import com.example.testing.ViewModel.ContestViewModel
 import com.example.testing.ViewModel.ContestViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.each_row.*
 
 
-class MainActivity : AppCompatActivity(),ContestAdapter.OnItemClickListener {
-    private lateinit var listcontest:List<contestItem>
+class MainActivity : AppCompatActivity() {
+    //, ContestAdapter.OnItemClickListener
+    private lateinit var listcontest: List<contestItem>
     private lateinit var recyclerView: RecyclerView
     private lateinit var contestAdapter: ContestAdapter
     private lateinit var contestViewModel: ContestViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initRecyclerView()
-        val contestRepository=ContestRepository()
-        val viewModelFactory=ContestViewModelFactory(contestRepository)
-        contestViewModel= ViewModelProvider(this,viewModelFactory)[ContestViewModel::class.java]
 
-
-        contestViewModel.getContest()
-        contestViewModel.contestMutableLiveData.observe(this, Observer {
-            listcontest=it
-            contestAdapter.setData(it as ArrayList<contestItem>)
-            progressBar.visibility= View.GONE
-            recyclerView.visibility= View.VISIBLE
-        })
-
-
+        init()
+//        floatingActionButton.setOnClickListener {
+//            progressBar.visibility = View.VISIBLE
+//            recyclerView.visibility = View.INVISIBLE
+//
+//            refresh()
+//        }
 
 
 
     }
 
-    override fun onItemClick(position: Int) {
+    private fun init() {
+        initRecyclerView()
+        val contestRepository = ContestRepository()
+        val viewModelFactory = ContestViewModelFactory(contestRepository)
+        contestViewModel = ViewModelProvider(this, viewModelFactory)[ContestViewModel::class.java]
+
+
+        contestViewModel.getContest()
+        contestViewModel.contestMutableLiveData.observe(this, Observer {
+            listcontest = it
+
+            for( i in it.indices){
+                if(it[i].name=="CodeChef")
+                {
+                    cardView.setBackgroundResource(R.drawable.bg2)
+                }
+            }
+
+            contestAdapter.setData(it as ArrayList<contestItem>)
+          //  cardView.setBackgroundResource(R.drawable.ic_launcher_background)
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        })
+
+
+    }
+
+    /*override fun onItemClick(position: Int) {
 
         //val name=listcontest[position].name
         //Toast.makeText(this,"$name",Toast.LENGTH_SHORT).show()
-        val url=listcontest[position].url
+//        val size=listcontest.size
+//        Toast.makeText(this,"$size",Toast.LENGTH_SHORT).show()
+
+        val url = listcontest[position].url
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse(url)
         startActivity(i)
 
 
-    }
+    }*/
 
     private fun initRecyclerView() {
-        recyclerView=findViewById(R.id.recyclerView)
-        contestAdapter= ContestAdapter(this, ArrayList(),this)
+        recyclerView = findViewById(R.id.recyclerView)
+        contestAdapter = ContestAdapter(this, ArrayList())
+        //, this
         recyclerView.apply {
             setHasFixedSize(true)
-            layoutManager= LinearLayoutManager(this@MainActivity)
-            adapter=contestAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = contestAdapter
+
         }
     }
 }

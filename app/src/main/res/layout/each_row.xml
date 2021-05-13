@@ -4,10 +4,18 @@
     android:id="@+id/cardView"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp"
+
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+
     app:cardUseCompatPadding="true"
-    android:layout_height="wrap_content">
+    android:layout_height="250dp">
 
     <LinearLayout
+        android:background="@drawable/bg3"
+        android:id="@+id/linearlv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
