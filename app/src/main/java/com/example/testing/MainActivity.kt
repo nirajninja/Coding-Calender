@@ -3,7 +3,11 @@ package com.example.testing
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -17,81 +21,139 @@ import com.example.testing.ViewModel.ContestViewModel
 import com.example.testing.ViewModel.ContestViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.each_row.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
-    //, ContestAdapter.OnItemClickListener
+
     private lateinit var listcontest: List<contestItem>
+
+
     private lateinit var recyclerView: RecyclerView
+    private lateinit var displayList: List<contestItem>
+
     private lateinit var contestAdapter: ContestAdapter
+
     private lateinit var contestViewModel: ContestViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        init()
-//        floatingActionButton.setOnClickListener {
-//            progressBar.visibility = View.VISIBLE
-//            recyclerView.visibility = View.INVISIBLE
-//
-//            refresh()
-//        }
 
 
-
-    }
-
-    private fun init() {
-        initRecyclerView()
-        val contestRepository = ContestRepository()
-        val viewModelFactory = ContestViewModelFactory(contestRepository)
-        contestViewModel = ViewModelProvider(this, viewModelFactory)[ContestViewModel::class.java]
-
-
-        contestViewModel.getContest()
-        contestViewModel.contestMutableLiveData.observe(this, Observer {
-            listcontest = it
-
-            for( i in it.indices){
-                if(it[i].name=="CodeChef")
-                {
-                    cardView.setBackgroundResource(R.drawable.bg2)
-                }
-            }
-
-            contestAdapter.setData(it as ArrayList<contestItem>)
-          //  cardView.setBackgroundResource(R.drawable.ic_launcher_background)
-            progressBar.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
-        })
+        initialize()
+        floatingActionButton.setOnClickListener {
+            initialize()
+        }
 
 
     }
 
-    /*override fun onItemClick(position: Int) {
-
-        //val name=listcontest[position].name
-        //Toast.makeText(this,"$name",Toast.LENGTH_SHORT).show()
-//        val size=listcontest.size
-//        Toast.makeText(this,"$size",Toast.LENGTH_SHORT).show()
-
-        val url = listcontest[position].url
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(url)
-        startActivity(i)
-
-
-    }*/
-
-    private fun initRecyclerView() {
+    private fun initialize() {
         recyclerView = findViewById(R.id.recyclerView)
         contestAdapter = ContestAdapter(this, ArrayList())
-        //, this
         recyclerView.apply {
-            setHasFixedSize(true)
+
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = contestAdapter
 
         }
+        val contestRepository = ContestRepository()
+        val viewModelFactory = ContestViewModelFactory(contestRepository)
+        contestViewModel = ViewModelProvider(this, viewModelFactory)[ContestViewModel::class.java]
+        contestViewModel.getContest()
+        contestViewModel.contestMutableLiveData.observe(this, Observer {
+            listcontest = it
+            displayList = it
+
+
+            contestAdapter.setData(it as ArrayList<contestItem>)
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        })
+
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        val menuItem = menu!!.findItem(R.id.search)
+        if (menuItem != null) {
+
+            val searchView = menuItem.actionView as SearchView
+
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return true
+                }
+
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+
+                    if (newText!!.isNotEmpty()) {
+
+                        displayList = emptyList()
+
+                        /* displayList.forEach {
+
+                             Log.d("TAG",it.site)
+
+                         }*/
+
+                        val search = newText.toLowerCase(Locale.getDefault())
+
+                        listcontest.forEach {
+
+                            //Log.d("TAG",it.site)
+
+                            if (it.site.toLowerCase(Locale.getDefault()).contains(search)) {
+
+                                displayList += it
+
+                            }
+
+                        }
+
+                        if (displayList.isNotEmpty()) {
+
+                            val cadapter = ContestAdapter(
+                                this@MainActivity,
+                                displayList as ArrayList<contestItem>
+                            )
+
+                            recyclerView.apply {
+
+                                layoutManager = LinearLayoutManager(this@MainActivity)
+
+                                adapter = cadapter
+
+                            }
+                        }
+
+
+                    } else {
+                        displayList = emptyList()
+
+                        recyclerView.adapter!!.notifyDataSetChanged()
+
+                    }
+
+
+                    return true
+                }
+            })
+        }
+
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 }
+

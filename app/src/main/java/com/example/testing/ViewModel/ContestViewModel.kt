@@ -9,22 +9,19 @@ import com.example.testing.Repository.ContestRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class ContestViewModel(private  val contestRepository: ContestRepository):ViewModel() {
+class ContestViewModel(private val contestRepository: ContestRepository) : ViewModel() {
 
 
-    val contestMutableLiveData:MutableLiveData<List<contestItem>> = MutableLiveData()
+    val contestMutableLiveData: MutableLiveData<List<contestItem>> = MutableLiveData()
 
 
-    fun getContest()
-    {
+    fun getContest() {
         viewModelScope.launch {
             try {
-                val response= contestRepository.getContest()
+                val response = contestRepository.getContest()
                 contestMutableLiveData.value = response
-            }
-            catch (e:Exception)
-            {
-                Log.d("TAG","fail ho gya h tu be!!")
+            } catch (e: Exception) {
+                Log.d("TAG", "fail ho gya h tu be!!")
             }
         }
     }
