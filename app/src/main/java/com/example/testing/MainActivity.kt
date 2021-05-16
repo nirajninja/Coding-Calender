@@ -20,7 +20,6 @@ import com.example.testing.Repository.ContestRepository
 import com.example.testing.ViewModel.ContestViewModel
 import com.example.testing.ViewModel.ContestViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.each_row.*
 import java.util.*
 import kotlin.collections.ArrayList
 
