@@ -78,7 +78,7 @@ class ContestAdapter(
             "CodeChef" -> {
                 holder.logo.setImageDrawable(getDrawable(context,R.drawable.cclog))
 
-                holder.linearlayout.setBackgroundResource(R.drawable.bg4)
+                holder.linearlayout.setBackgroundResource(R.drawable.bg5)
             }
             "CS Academy"->{
                 holder.logo.setImageDrawable(getDrawable(context,R.drawable.cs))
@@ -93,7 +93,7 @@ class ContestAdapter(
 
             "LeetCode"->{
                 holder.logo.setImageDrawable(getDrawable(context,R.drawable.leetcode))
-                holder.linearlayout.setBackgroundResource(R.drawable.bg4)
+                holder.linearlayout.setBackgroundResource(R.drawable.bg1)
             }
 
             "Kick Start"->{

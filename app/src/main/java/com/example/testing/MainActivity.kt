@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,9 @@ import com.example.testing.Model.contestItem
 import com.example.testing.Repository.ContestRepository
 import com.example.testing.ViewModel.ContestViewModel
 import com.example.testing.ViewModel.ContestViewModelFactory
+import com.github.ybq.android.spinkit.sprite.Sprite
+import com.github.ybq.android.spinkit.style.Circle
+import com.github.ybq.android.spinkit.style.DoubleBounce
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,10 +40,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var contestViewModel: ContestViewModel
 
+    private lateinit var progressBar:ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        progressBar = findViewById<View>(R.id.spin_kit) as ProgressBar
+
+        val doubleBounce: Sprite = Circle()
+        progressBar.indeterminateDrawable = doubleBounce
 
 
         initialize()
