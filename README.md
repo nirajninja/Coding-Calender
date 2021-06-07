@@ -5,4 +5,5 @@ All the cardview templates are designed by satyarthiaman@gmail.com
 
 
 Here are some screenshots of app.
-![search bar] (https://github.com/nirajninja/Coding-Calender/blob/master/app/src/main/res/drawable-v24/ss1.jpg)
+
+![search bar](https://github.com/nirajninja/Coding-Calender/blob/master/app/src/main/res/drawable-v24/ss1.jpg)
